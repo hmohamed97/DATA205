@@ -1,0 +1,83 @@
+---
+title: "DATA 205 Project"
+author: "Mohamed Nabeel"
+date: "2/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(plotly)
+```
+
+```{r}
+df<-read.csv("Crime_Year_To_Date_-_2019.csv")
+sum(is.na(df))
+```
+
+
+```{r}
+df <- df %>%
+  mutate(victims = replace('victims', 'victims' == "na", NA)) %>%
+  mutate(victims = replace('victims', 'victims' == "N/A", NA)) %>%
+  mutate(victims = replace('victims', 'victims' == "", NA)) %>%
+  mutate(victims = replace('victims', 'victims' == "?", NA)) %>%
+  mutate(victims = replace('victims', 'victims' == "NA", NA))
+
+df <- df %>%
+  mutate(CrimeName2 = replace('Crime Name2', 'Crime Name2' == "na", NA)) %>%
+  mutate(CrimeName2 = replace('Crime Name2', 'Crime Name2' == "N/A", NA)) %>%
+  mutate(CrimeName2 = replace('Crime Name2', 'Crime Name2' == "", NA)) %>%
+  mutate(CrimeName2 = replace('Crime Name2', 'Crime Name2' == "?", NA)) %>%
+  mutate(CrimeName2 = replace('Crime Name2', 'Crime Name2' == "NA", NA))
+
+df <- df %>%
+  mutate(place = replace('place', 'place' == "na", NA)) %>%
+  mutate(place = replace('place', 'place' == "N/A", NA)) %>%
+  mutate(place = replace('place', 'place' == "", NA)) %>%
+  mutate(place = replace('place', 'place' == "?", NA)) %>%
+  mutate(place = replace('place', 'place' == "NA", NA))
+
+df <- df %>%
+  mutate(zipcode = replace('zip code', 'zip code' == "na", NA)) %>%
+  mutate(zipcode = replace('zip code', 'zip code' == "N/A", NA)) %>%
+  mutate(zipcode = replace('zip code', 'zip code' == "", NA)) %>%
+  mutate(zipcode = replace('zip code', 'zip code' == "?", NA)) %>%
+  mutate(zipcode = replace('zip code', 'zip code' == "NA", NA))
+```
+
+
+```{r}
+head(df$Crime.Name1)
+head(df$Crime.Name2)
+(summary(df$Crime.Name2))
+```
+
+
+```{r}
+arrange(df,desc(Crime.Name2)) %>%
+  head(10)
+```
+
+```{r}
+top5<-df %>%
+  group_by(Crime.Name2) %>%
+  summarize(sum=sum(Victims)) %>%
+  arrange(desc(sum)) %>%
+  top_n(n=5)
+top5
+```
+
+```{r}
+arrange(df,desc(Police.District.Name)) %>%
+  head(10)
+```
+
+
